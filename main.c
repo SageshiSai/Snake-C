@@ -1,0 +1,1 @@
+//aqui se incializa la ventana de la interfaz grafica y  el que inicia el juego
