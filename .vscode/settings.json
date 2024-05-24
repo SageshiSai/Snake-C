@@ -59,6 +59,7 @@
   "files.associations": {
     "*.embeddedhtml": "html",
     "*.html": "html",
-    "game_logic.h": "c"
+    "game_logic.h": "c",
+    "curses.h": "c"
   }
 }
