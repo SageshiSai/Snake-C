@@ -4,7 +4,7 @@
 #include <time.h>
 
 /*
-Contiene la logica del juego, movimiento de la serpieente, comida, colisiones, etc.
+Contiene la logica del juego, movimiento de la serpiente, comida, colisiones, etc.
 Aparte de que se implementan las funciones y variables globales declaradas en el archivo de cabecera game_logic.h
 */
 
@@ -17,6 +17,8 @@ void initialize_game() {
     noecho();             // No mostrar la entrada del teclado
     cbreak();             // Desactiva el buffer de línea
     curs_set(0);          // Oculta el cursor
+    keypad(stdscr, TRUE); // Habilita la captura de teclas especiales
+    nodelay(stdscr, TRUE);// No bloquear la espera de entrada
     timeout(100);         // Establece el tiempo de espera para getch
 }
 
@@ -59,7 +61,24 @@ int check_collision(Snake *snake, Food *food) {
     return 0; // No hay colisión
 }
 
-//gcc -o juego_snake main.c game_logic.c -I C:/PDCurses -L C:/PDCurses/wincon -l:pdcurses.a
+int check_self_collision(Snake *snake) {
+    for (int i = 1; i < snake->length; i++) {
+        if (snake->pos[0].x == snake->pos[i].x && snake->pos[0].y == snake->pos[i].y) {
+            return 1; // Colisión detectada
+        }
+    }
+    return 0; // No hay colisión
+}
+
+int check_wall_collision(Snake *snake) {
+    if (snake->pos[0].x < 0 || snake->pos[0].x >= WIDTH || snake->pos[0].y < 0 || snake->pos[0].y >= HEIGHT) {
+        return 1; // Colisión con la pared detectada
+    }
+    return 0; // No hay colisión
+}
+
+
+//!gcc -o juego_snake main.c game_logic.c -I C:/PDCurses -L C:/PDCurses/wincon -l:pdcurses.a
 
 
 

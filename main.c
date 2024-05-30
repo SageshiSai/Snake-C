@@ -1,53 +1,72 @@
-#include "game_logic.h"
 #include <curses.h>
 #include <stdlib.h>
 #include <time.h>
-
-//?aqui se incializa la ventana de la interfaz grafica y  el que inicia el juego
+#include "game_logic.h"
+#include "render.h"
 
 int main() {
-    Snake snake = {{{5, 5}}, 1, 1}; // Inicializar la serpiente
+    Snake snake = {{{15, 10}}, 1, 1};  // Inicializa la serpiente en el centro
     Food food;
-    generate_food(&food);           // Generar la primera comida
-
-    initialize_game();              // Inicializar el juego
+    srand(time(NULL));                 // Inicializa la semilla para la generación de comida
+    initialize_game();                 // Inicializa el entorno del juego
+    generate_food(&food);              // Genera la primera comida
 
     while (gameRunning) {
-        clear();                    // Limpiar la pantalla
+        // Capturar la entrada del teclado
+        int ch = getch();
+        mvprintw(0, 0, "Tecla presionada: %d", ch); // Mostrar la tecla presionada para depuración
 
-        // Dibujar la comida
-        mvprintw(food.pos.y, food.pos.x, "O");
+        switch (ch) {
+    case 'w':
+    case 'W':
+        mvprintw(1, 0, "Arriba    ");
+        if (snake.dir != 2) snake.dir = 0;
+        break;
+    case 'd':
+    case 'D':
+        mvprintw(1, 0, "Derecha   ");
+        if (snake.dir != 3) snake.dir = 1;
+        break;
+    case 's':
+    case 'S':
+        mvprintw(1, 0, "Abajo     ");
+        if (snake.dir != 0) snake.dir = 2;
+        break;
+    case 'a':
+    case 'A':
+        mvprintw(1, 0, "Izquierda ");
+        if (snake.dir != 1) snake.dir = 3;
+        break;
+    case 'q':  // Permitir al usuario salir presionando 'q'
+        gameRunning = 0;
+        break;
+    default:
+        mvprintw(1, 0, "Otra tecla");
+}
 
-        // Dibujar la serpiente
-        for (int i = 0; i < snake.length; i++) {
-            mvprintw(snake.pos[i].y, snake.pos[i].x, "X");
-        }
-
-        // Mover la serpiente
-        move_snake(&snake);
+        move_snake(&snake);  // Mover la serpiente
 
         // Verificar colisiones
+        if (check_self_collision(&snake) || check_wall_collision(&snake)) {
+            gameRunning = 0;
+        }
+
+        // Verificar si la serpiente ha comido la comida
         if (check_collision(&snake, &food)) {
-            score++;
             snake.length++;
+            score++;
             generate_food(&food);
         }
 
-        // Esperar y leer la entrada del usuario
-        int ch = getch();
-        switch (ch) {
-            case KEY_UP:    snake.dir = 0; break;
-            case KEY_RIGHT: snake.dir = 1; break;
-            case KEY_DOWN:  snake.dir = 2; break;
-            case KEY_LEFT:  snake.dir = 3; break;
-            case 'q':       gameRunning = 0; break;
-        }
+        // Renderizar la pantalla
+        clear();
+        render(&snake, &food);
+        refresh();
 
-        refresh(); // Refrescar la pantalla
+        // Añadir un pequeño retraso
+        napms(100);
     }
 
-    end_game(); // Finalizar el juego
+    end_game();  // Finalizar el juego
     return 0;
 }
-
-

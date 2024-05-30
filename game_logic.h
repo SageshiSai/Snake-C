@@ -1,4 +1,4 @@
-#ifndef GAME_LOGIC_H   // Guarda de inclusión para evitar inclusión múltiple
+#ifndef GAME_LOGIC_H   
 #define GAME_LOGIC_H
 
 /*
@@ -37,5 +37,7 @@ void end_game();
 void move_snake(Snake *snake);
 void generate_food(Food *food);
 int check_collision(Snake *snake, Food *food);
+int check_self_collision(Snake *snake);
+int check_wall_collision(Snake *snake);
 
 #endif /* GAME_LOGIC_H */
