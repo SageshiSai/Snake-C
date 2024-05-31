@@ -20,6 +20,15 @@ void initialize_game() {
     keypad(stdscr, TRUE); // Habilita la captura de teclas especiales
     nodelay(stdscr, TRUE);// No bloquear la espera de entrada
     timeout(100);         // Establece el tiempo de espera para getch
+
+
+    // Inicializa el soporte de color
+    if (has_colors()) {
+        start_color();
+        init_pair(1, COLOR_GREEN, COLOR_BLACK);  // Color para la serpiente
+        init_pair(2, COLOR_RED, COLOR_BLACK);    // Color para la comida
+        init_pair(3, COLOR_WHITE, COLOR_BLACK);  // Color para los muros
+    }
 }
 
 void end_game() {
@@ -49,8 +58,8 @@ void move_snake(Snake *snake) {
 
 void generate_food(Food *food) {
     // Generar una posición aleatoria para la comida
-    food->pos.x = rand() % WIDTH;
-    food->pos.y = rand() % HEIGHT;
+    food->pos.x = (rand() % (WIDTH - 2)) + 1;
+    food->pos.y = (rand() % (HEIGHT - 2)) + 1;
 }
 
 int check_collision(Snake *snake, Food *food) {

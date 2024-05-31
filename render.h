@@ -5,6 +5,6 @@
 #include <curses.h>
 
 // Declarar la función de renderizado
-void render(Snake *snake, Food *food);
+void render_game(Snake *snake, Food *food);
 
 #endif /* RENDER_H */

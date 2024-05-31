@@ -7,8 +7,8 @@ En este archivo se declaran las constantes, estructuras, variables globales y fu
 
 
 // Definir constantes para el tamaño de la pantalla
-#define WIDTH 30
-#define HEIGHT 20
+#define WIDTH 25
+#define HEIGHT 15
 
 // Definir estructura Position
 typedef struct {

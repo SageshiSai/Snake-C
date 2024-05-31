@@ -60,7 +60,7 @@ int main() {
 
         // Renderizar la pantalla
         clear();
-        render(&snake, &food);
+        render_game(&snake, &food);
         refresh();
 
         // Añadir un pequeño retraso
