@@ -5,11 +5,6 @@
 En este archivo se declaran las constantes, estructuras, variables globales y funciones
 */
 
-
-// Definir constantes para el tamaño de la pantalla
-#define WIDTH 25
-#define HEIGHT 15
-
 // Definir estructura Position
 typedef struct {
     int x, y;
@@ -35,7 +30,7 @@ extern int score;        // Puntuación del jugador
 void initialize_game();
 void end_game();
 void move_snake(Snake *snake);
-void generate_food(Food *food);
+void generate_food(Food *food, Snake *snake);
 int check_collision(Snake *snake, Food *food);
 int check_self_collision(Snake *snake);
 int check_wall_collision(Snake *snake);

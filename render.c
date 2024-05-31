@@ -1,4 +1,5 @@
 #include "render.h"
+#include "settings.h" 
 
 void render_game(Snake *snake, Food *food) {
     clear();

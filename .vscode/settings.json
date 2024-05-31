@@ -60,6 +60,8 @@
     "*.embeddedhtml": "html",
     "*.html": "html",
     "game_logic.h": "c",
-    "curses.h": "c"
+    "curses.h": "c",
+    "utils.h": "c",
+    "stdlib.h": "c"
   }
 }

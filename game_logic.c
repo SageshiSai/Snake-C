@@ -1,6 +1,7 @@
 #include "game_logic.h"
 #include <curses.h>
 #include <stdlib.h>
+#include "settings.h"
 #include <time.h>
 
 /*
@@ -19,15 +20,15 @@ void initialize_game() {
     curs_set(0);          // Oculta el cursor
     keypad(stdscr, TRUE); // Habilita la captura de teclas especiales
     nodelay(stdscr, TRUE);// No bloquear la espera de entrada
-    timeout(100);         // Establece el tiempo de espera para getch
+    timeout(GAME_SPEED);  // Establece el tiempo de espera para getch
 
 
     // Inicializa el soporte de color
     if (has_colors()) {
         start_color();
-        init_pair(1, COLOR_GREEN, COLOR_BLACK);  // Color para la serpiente
-        init_pair(2, COLOR_RED, COLOR_BLACK);    // Color para la comida
-        init_pair(3, COLOR_WHITE, COLOR_BLACK);  // Color para los muros
+        init_pair(SNAKE_COLOR, COLOR_GREEN, COLOR_BLACK);  // Color para la serpiente
+        init_pair(FOOD_COLOR, COLOR_RED, COLOR_BLACK);    // Color para la comida
+        init_pair(WALL_COLOR, COLOR_WHITE, COLOR_BLACK);  // Color para los muros
     }
 }
 
@@ -56,10 +57,27 @@ void move_snake(Snake *snake) {
     snake->pos[0] = new_head;
 }
 
-void generate_food(Food *food) {
+void generate_food(Food *food, Snake *snake) {
     // Generar una posición aleatoria para la comida
-    food->pos.x = (rand() % (WIDTH - 2)) + 1;
-    food->pos.y = (rand() % (HEIGHT - 2)) + 1;
+    int food_x, food_y;
+    bool collision;
+    do {
+        collision = false;
+        food_x = (rand() % (WIDTH - 2)) + 1;
+        food_y = (rand() % (HEIGHT - 2)) + 1;
+        // Verificar si la comida se generó en el cuerpo de la serpiente
+        int collision = 0;
+        for (int i = 0; i < snake->length; i++) {
+            if (food_x == snake->pos[i].x && food_y == snake->pos[i].y) {
+                collision = true;
+                break;
+            }
+        }
+        if (!collision) {
+            food->pos.x = food_x;
+            food->pos.y = food_y;
+        }
+    } while (collision);
 }
 
 int check_collision(Snake *snake, Food *food) {

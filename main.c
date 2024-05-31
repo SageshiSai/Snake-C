@@ -3,13 +3,16 @@
 #include <time.h>
 #include "game_logic.h"
 #include "render.h"
+#include "utils.h"
+#include "settings.h"
 
 int main() {
     Snake snake = {{{15, 10}}, 1, 1};  // Inicializa la serpiente en el centro
     Food food;
     srand(time(NULL));                 // Inicializa la semilla para la generación de comida
     initialize_game();                 // Inicializa el entorno del juego
-    generate_food(&food);              // Genera la primera comida
+    generate_food(&food, &snake);               // Genera la primera comida
+    generate_walls();             
 
     while (gameRunning) {
         // Capturar la entrada del teclado
@@ -55,7 +58,7 @@ int main() {
         if (check_collision(&snake, &food)) {
             snake.length++;
             score++;
-            generate_food(&food);
+            generate_food(&food, &snake);
         }
 
         // Renderizar la pantalla
